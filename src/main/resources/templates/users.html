@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<meta charset="ISO-8859-1">
+	<title>List Users</title>
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+	<script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="container text-center">
+	<div>
+		<form th:action="@{/logout}" method="post">
+			<p>
+				Welcome <b>[[${#request.userPrincipal.principal.fullName}]] </b>
+				<span sec:authentication="principal.authorities"></span>
+			</p>
+			<input type="submit" value="Sign Out" />
+		</form>
+	</div>
+	<div>
+		<h1>List of Users</h1>
+	</div>
+	<div>
+		<form th:action="@{/users/filter}" method="get">
+			<input type="text" placeholder="Search.." th:name="familyName">
+			<input type="submit" value="Search" />
+		</form>
+	 </div>
+	<div>
+		<table class="table table-striped table-bordered">
+			<thead class="thead-dark">
+				<tr>
+					<th>User ID</th>
+					<th>E-mail</th>
+					<th>Given Name</th>
+					<th>Family Name</th>
+					<th>Birth Date</th>
+					<th>Roles</th>
+					<th>Edit</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="user: ${listUsers}">
+					<td th:text="${user.id}">User ID</td>
+					<td th:text="${user.email}">E-mail</td>
+					<td th:text="*{user.givenName}">Given Name</td>
+					<td th:text="*{user.familyName}">Birth Date</td>
+					<td th:text="*{user.birthDate}">Birth Date</td>
+					<td th:text="${user.roles}">Roles</td>
+					<td><a th:href="@{'/users/edit/' + ${user.id}}">Edit</a></td>
+					<td><a th:href="@{'/users/delete/' + ${user.id}}" class="btn btn-danger">Delete</a></td>
+<!--					<td>-->
+<!--						<form method="post" th:action="@{/users/delete(id=${user.id})}">-->
+<!--							<button type="submit" name="delete" value="value" class="link-button">Delete</button>-->
+<!--						</form>-->
+<!--					</td>-->
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+</body>
+</html>
